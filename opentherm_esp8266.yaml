@@ -1,7 +1,3 @@
-substitutions:
-  devicename: ot
-  upper_devicename: OT
-
 esphome:
   includes:
     - opentherm.h
