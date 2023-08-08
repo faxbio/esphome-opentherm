@@ -24,9 +24,11 @@ namespace esphome {
             mOT.setup(std::bind( & OpenThermGWClimate::processRequest, this, std::placeholders::_1, std::placeholders::_2));
             sOT.setup(nullptr);
 
-            register_service( & OpenThermGWClimate::set_ch_override_setpoint, "CH temperature override setpoint", {
+            register_service( & OpenThermGWClimate::set_ch_override_setpoint, "CH_temperature_override_setpoint", {
                 "setpoint"
             });
+            register_service( &OpenThermGWClimate::enable_dhw_preheat, "Enable_DHW_preheat");
+            register_service( &OpenThermGWClimate::disable_dhw_preheat, "Disable_DHW_preheat");
         }
 
         void OpenThermGWClimate::loop() {
@@ -49,7 +51,7 @@ namespace esphome {
             traits.set_supports_current_temperature(true);
             //traits.set_supports_auto_mode(true);
             //traits.set_supports_cool_mode(true);
-            traits.add_supported_mode(climate::CLIMATE_MODE_OFF, climate::CLIMATE_MODE_HEAT);
+            traits.add_supported_mode(climate::CLIMATE_MODE_HEAT);
             traits.set_supported_presets({
                 climate::CLIMATE_PRESET_HOME,
                 climate::CLIMATE_PRESET_AWAY,
@@ -337,6 +339,14 @@ namespace esphome {
                 uint16_t data = getUInt16(request) | 0b100000000;
                 request = modifyMsgData(request, data);
             }
+            if (this->dhw_preheat == 1) {
+                uint16_t data = getUInt16(request) | 0b1000000000;
+                request = modifyMsgData(request, data);
+            }
+            if (this->dhw_preheat == 0) {
+                uint16_t data = getUInt16(request) & ~0b1000000000;
+                request = modifyMsgData(request, data);
+            }
         }
 
         void OpenThermGWClimate::process_Slave_MSG_STATUS(uint32_t & response) {
@@ -391,7 +401,15 @@ namespace esphome {
         void OpenThermGWClimate::set_ch_override_setpoint(float setpoint) {
             this->ch_override_setpoint = setpoint;
         }
-
+		
+        void OpenThermGWClimate::enable_dhw_preheat() {
+            this->dhw_preheat = 1;
+        }
+		
+        void OpenThermGWClimate::disable_dhw_preheat() {
+            this->dhw_preheat = 0;
+        }
+		
         // #1: Control setpoint ie CH water temperature setpoint (°C)
         void OpenThermGWClimate::process_Master_MSG_TSET(uint32_t & request) {
             float control_setpoint = getFloat(request);

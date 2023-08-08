@@ -24,6 +24,8 @@ namespace esphome {
             void processResponse(uint32_t request, uint32_t & response, OpenThermResponseStatus status);
 
             void set_ch_override_setpoint(float setpoint);
+			void enable_dhw_preheat();
+			void disable_dhw_preheat();
 
             void process_Master_MSG_COMMAND(uint32_t & request);
             void process_Master_MSG_DATE(uint32_t & request);
@@ -105,6 +107,7 @@ namespace esphome {
             optional < float > max_ch_water_setpoint;
 
             float ch_override_setpoint = 0;
+			uint8_t dhw_preheat = 0;
 
             binary_sensor::BinarySensor * ch2_active {
                 nullptr

@@ -107,6 +107,13 @@ climate:
     ot->relative_modulation_level->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->relative_modulation_level);
     
+    ot->dhw_flow_rate = new Sensor();
+    ot->dhw_flow_rate->set_name("DHW Flow rate");
+    ot->dhw_flow_rate->set_object_id("DHW_Flow_rate");
+    ot->dhw_flow_rate->set_icon("mdi:water-pump");
+    ot->dhw_flow_rate->set_state_class(STATE_CLASS_MEASUREMENT);
+    App.register_sensor(ot->dhw_flow_rate);
+
     App.register_component(ot);
     
     return {ot};
