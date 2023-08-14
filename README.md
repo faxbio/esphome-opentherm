@@ -1,4 +1,4 @@
-# OpenTherm
+# ESPHome OpenTherm gateway
 Port of OpenTherm protocol to ESPHome.io firmware. This version is based on the ESPhome version of https://github.com/wichers/esphome-opentherm
 
 ## Hardware:
