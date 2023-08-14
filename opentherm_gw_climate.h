@@ -23,9 +23,9 @@ namespace esphome {
             void processRequest(uint32_t request, OpenThermResponseStatus status);
             void processResponse(uint32_t request, uint32_t & response, OpenThermResponseStatus status);
 
-            void set_ch_override_setpoint(float setpoint);
-			void enable_dhw_preheat();
-			void disable_dhw_preheat();
+            void ch_setpoint_override(float setpoint);
+			void dhw_preheat_enable();
+			void dhw_preheat_disable();
 
             void process_Master_MSG_COMMAND(uint32_t & request);
             void process_Master_MSG_DATE(uint32_t & request);

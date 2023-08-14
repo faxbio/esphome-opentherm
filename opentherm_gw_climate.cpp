@@ -24,11 +24,11 @@ namespace esphome {
             mOT.setup(std::bind( & OpenThermGWClimate::processRequest, this, std::placeholders::_1, std::placeholders::_2));
             sOT.setup(nullptr);
 
-            register_service( & OpenThermGWClimate::set_ch_override_setpoint, "CH_temperature_override_setpoint", {
+            register_service( & OpenThermGWClimate::ch_setpoint_override, "CH_temperature_setpoint_override", {
                 "setpoint"
             });
-            register_service( &OpenThermGWClimate::enable_dhw_preheat, "Enable_DHW_preheat");
-            register_service( &OpenThermGWClimate::disable_dhw_preheat, "Disable_DHW_preheat");
+            register_service( &OpenThermGWClimate::dhw_preheat_enable, "DHW_preheat_enable");
+            register_service( &OpenThermGWClimate::dhw_preheat_disable, "DHW_preheat_disable");
         }
 
         void OpenThermGWClimate::loop() {
@@ -134,7 +134,7 @@ namespace esphome {
                 process_Master_MSG_MAX_REL_MOD_LEVEL_SETTING(request);
                 break;
             default:
-                ESP_LOGD(TAG, "Request %d not handled!", id);
+                //ESP_LOGD(TAG, "Request %d not handled!", id);
                 break;
             }
 
@@ -398,15 +398,15 @@ namespace esphome {
         }
 
         // Override CH setpoint when msgID9 is not implemented
-        void OpenThermGWClimate::set_ch_override_setpoint(float setpoint) {
+        void OpenThermGWClimate::ch_setpoint_override(float setpoint) {
             this->ch_override_setpoint = setpoint;
         }
 		
-        void OpenThermGWClimate::enable_dhw_preheat() {
+        void OpenThermGWClimate::dhw_preheat_enable() {
             this->dhw_preheat = 1;
         }
 		
-        void OpenThermGWClimate::disable_dhw_preheat() {
+        void OpenThermGWClimate::dhw_preheat_disable() {
             this->dhw_preheat = 0;
         }
 		
