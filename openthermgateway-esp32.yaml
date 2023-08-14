@@ -4,9 +4,9 @@ esphome:
     - opentherm.cpp
     - opentherm_gw_climate.h
     - opentherm_gw_climate.cpp
-  name: openthermgateway
-  platform: ESP8266
-  board: d1_mini
+  name: openthermgateway-esp32
+  platform: ESP32
+  board: esp-wrover-kit
 
 wifi:
   ssid: !secret wifi_ssid
@@ -28,17 +28,17 @@ binary_sensor:
 climate:
 - platform: custom
   lambda: |-
-    auto thermostat_in = new esphome::esp8266::ESP8266GPIOPin();
-    thermostat_in->set_pin(12);
+    auto thermostat_in = new esphome::esp32::ESP32InternalGPIOPin();
+    thermostat_in->set_pin(GPIO_NUM_26);
     thermostat_in->set_flags(gpio::FLAG_INPUT);
-    auto thermostat_out = new esphome::esp8266::ESP8266GPIOPin();
-    thermostat_out->set_pin(13);
+    auto thermostat_out = new esphome::esp32::ESP32InternalGPIOPin();
+    thermostat_out->set_pin(GPIO_NUM_17);
     thermostat_out->set_flags(gpio::FLAG_OUTPUT);
-    auto boiler_in = new esphome::esp8266::ESP8266GPIOPin();
-    boiler_in->set_pin(4);
+    auto boiler_in = new esphome::esp32::ESP32InternalGPIOPin();
+    boiler_in->set_pin(GPIO_NUM_25);
     boiler_in->set_flags(gpio::FLAG_INPUT);
-    auto boiler_out = new esphome::esp8266::ESP8266GPIOPin();
-    boiler_out->set_pin(5);
+    auto boiler_out = new esphome::esp32::ESP32InternalGPIOPin();
+    boiler_out->set_pin(GPIO_NUM_16);
     boiler_out->set_flags(gpio::FLAG_OUTPUT);
     auto ot = new esphome::opentherm::OpenThermGWClimate(thermostat_in, thermostat_out, boiler_in, boiler_out);
     App.register_component(ot);
@@ -77,6 +77,7 @@ climate:
     ot->control_setpoint->set_name("Control Setpoint");
     ot->control_setpoint->set_object_id("Control_Setpoint");
     ot->control_setpoint->set_icon("mdi:thermometer-lines");
+    ot->control_setpoint->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->control_setpoint);
 
     ot->boiler_water_temp = new Sensor();
