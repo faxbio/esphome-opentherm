@@ -9,12 +9,32 @@ esphome:
   board: d1_mini
 
 wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
+  networks:
+  - ssid: !secret wifi_ssid
+    password: !secret wifi_password
+  - ssid: !secret wifi_ssid1
+    password: !secret wifi_password1
+  - ssid: !secret wifi_ssid2
+    password: !secret wifi_password2
+  - ssid: !secret wifi_ssid3
+    password: !secret wifi_password3
+
+  manual_ip:
+    static_ip: 192.168.1.37
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+    dns1: 192.168.1.2
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "OTG Fallback Hotspot"
+    password: "adice19765."
+
+captive_portal:
 
 # Enable logging
 logger:
-  #baud_rate: 0
+  baud_rate: 0
   level: DEBUG
 
 api:
@@ -24,6 +44,11 @@ web_server:
 
 sensor:
 binary_sensor:
+  - platform: status
+    name: OTGW status
+switch:
+  - platform: restart
+    name: OTGW Restart
 
 climate:
 - platform: custom
@@ -42,7 +67,7 @@ climate:
     boiler_out->set_flags(gpio::FLAG_OUTPUT);
     auto ot = new esphome::opentherm::OpenThermGWClimate(thermostat_in, thermostat_out, boiler_in, boiler_out);
     App.register_component(ot);
-    
+
     ot->ch_active = new BinarySensor();
     ot->ch_active->set_name("CH Active");
     ot->ch_active->set_object_id("CH_Active");
@@ -73,25 +98,12 @@ climate:
     ot->fault_indication->set_icon("mdi:alert");
     App.register_binary_sensor(ot->fault_indication);
 
-    ot->control_setpoint = new Sensor();
-    ot->control_setpoint->set_name("Control Setpoint");
-    ot->control_setpoint->set_object_id("Control_Setpoint");
-    ot->control_setpoint->set_icon("mdi:thermometer-lines");
-    App.register_sensor(ot->control_setpoint);
-
     ot->boiler_water_temp = new Sensor();
     ot->boiler_water_temp->set_name("Boiler Water Temperature");
     ot->boiler_water_temp->set_object_id("Boiler_Water_Temperature");
     ot->boiler_water_temp->set_icon("mdi:water-thermometer");
     ot->boiler_water_temp->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->boiler_water_temp);
-
-    ot->return_water_temperature = new Sensor();
-    ot->return_water_temperature->set_name("Return Water Temperature");
-    ot->return_water_temperature->set_object_id("Return_Water_Temperature");
-    ot->return_water_temperature->set_icon("mdi:water-thermometer");
-    ot->return_water_temperature->set_state_class(STATE_CLASS_MEASUREMENT);
-    App.register_sensor(ot->return_water_temperature);
 
     ot->dhw_temperature = new Sensor();
     ot->dhw_temperature->set_name("DHW Temperature");
@@ -100,16 +112,35 @@ climate:
     ot->dhw_temperature->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->dhw_temperature);
 
+    ot->outside_air_temperature = new Sensor();
+    ot->outside_air_temperature->set_name("OUTSIDE Temperature");
+    ot->outside_air_temperature->set_object_id("OUTSIDE_Temperature");
+    ot->outside_air_temperature->set_icon("mdi:home-thermometer-outline");
+    ot->outside_air_temperature->set_state_class(STATE_CLASS_MEASUREMENT);
+    App.register_sensor(ot->outside_air_temperature);
+
+    ot->control_setpoint = new Sensor();
+    ot->control_setpoint->set_name("Control Setpoint");
+    ot->control_setpoint->set_object_id("Control_Setpoint");
+    ot->control_setpoint->set_icon("mdi:thermometer-lines");
+    App.register_sensor(ot->control_setpoint);
+
+    ot->return_water_temperature = new Sensor();
+    ot->return_water_temperature->set_name("Return Water Temperature");
+    ot->return_water_temperature->set_object_id("Return_Water_Temperature");
+    ot->return_water_temperature->set_icon("mdi:water-thermometer");
+    ot->return_water_temperature->set_state_class(STATE_CLASS_MEASUREMENT);
+    App.register_sensor(ot->return_water_temperature);
+
     ot->relative_modulation_level = new Sensor();
     ot->relative_modulation_level->set_name("Relative Modulation Level");
     ot->relative_modulation_level->set_object_id("Relative_Modulation_Level");
     ot->relative_modulation_level->set_icon("mdi:fire-circle");
     ot->relative_modulation_level->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->relative_modulation_level);
-    
-    App.register_component(ot);
-    
-    return {ot};
 
+    App.register_climate(ot);
+
+    return {ot};
   climates:
-    - name: "esphome_climate"
+    - name: "besmartgw"
