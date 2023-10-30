@@ -123,6 +123,7 @@ climate:
     ot->control_setpoint->set_name("Control Setpoint");
     ot->control_setpoint->set_object_id("Control_Setpoint");
     ot->control_setpoint->set_icon("mdi:thermometer-lines");
+    ot->control_setpoint->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->control_setpoint);
 
     ot->return_water_temperature = new Sensor();
