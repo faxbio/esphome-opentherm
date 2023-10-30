@@ -113,6 +113,7 @@ public:
   binary_sensor::BinarySensor *fault_indication{nullptr};
   binary_sensor::BinarySensor *flame_on{nullptr};
   sensor::Sensor *control_setpoint{nullptr};
+  sensor::Sensor *override_setpoint{nullptr};
   sensor::Sensor *boiler_water_temp{nullptr};
   sensor::Sensor *burner_operation_hours{nullptr};
   sensor::Sensor *burner_starts{nullptr};
