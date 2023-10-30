@@ -405,6 +405,9 @@ void OpenThermGWClimate::process_Master_MSG_TSET(uint32_t &request) {
     if (this->ch_override_setpoint != 0) {
         request = modifyMsgData(request, temperatureToData(ch_override_setpoint));
         }
+    if (this->control_setpoint != nullptr) {
+      this->control_setpoint->publish_state(control_setpoint);
+    }
 }
 
 // #5: Application-specific flags
