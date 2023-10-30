@@ -126,6 +126,13 @@ climate:
     ot->control_setpoint->set_state_class(STATE_CLASS_MEASUREMENT);
     App.register_sensor(ot->control_setpoint);
 
+    ot->override_setpoint = new Sensor();
+    ot->override_setpoint->set_name("Override Setpoint");
+    ot->override_setpoint->set_object_id("Override_Setpoint");
+    ot->override_setpoint->set_icon("mdi:thermometer-alert");
+    ot->override_setpoint->set_state_class(STATE_CLASS_MEASUREMENT);
+    App.register_sensor(ot->override_setpoint);
+
     ot->return_water_temperature = new Sensor();
     ot->return_water_temperature->set_name("Return Water Temperature");
     ot->return_water_temperature->set_object_id("Return_Water_Temperature");
