@@ -408,6 +408,9 @@ void OpenThermGWClimate::process_Master_MSG_TSET(uint32_t &request) {
     if (this->control_setpoint != nullptr) {
       this->control_setpoint->publish_state(control_setpoint);
     }
+    
+    this->override_setpoint->publish_state(ch_override_setpoint);
+
 }
 
 // #5: Application-specific flags
