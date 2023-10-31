@@ -28,7 +28,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "OTG Fallback Hotspot"
-    password: "adice19765."
+    password: !secret wifi_password
 
 captive_portal:
 
